@@ -4,23 +4,11 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
+import { DoubanItem, DoubanResult } from '@/lib/types';
+
 import DemoCard from '@/components/DemoCard';
 import DoubanCardSkeleton from '@/components/DoubanCardSkeleton';
 import PageLayout from '@/components/PageLayout';
-
-// 定义豆瓣数据项类型
-interface DoubanItem {
-  title: string;
-  poster: string;
-  rate?: string;
-}
-
-// 定义豆瓣响应类型
-interface DoubanResponse {
-  code: number;
-  message: string;
-  list: DoubanItem[];
-}
 
 function DoubanPageClient() {
   const searchParams = useSearchParams();
@@ -65,7 +53,7 @@ function DoubanPageClient() {
           throw new Error('获取豆瓣数据失败');
         }
 
-        const data: DoubanResponse = await response.json();
+        const data: DoubanResult = await response.json();
 
         if (data.code === 200) {
           setDoubanData(data.list);
@@ -100,7 +88,7 @@ function DoubanPageClient() {
             throw new Error('获取豆瓣数据失败');
           }
 
-          const data: DoubanResponse = await response.json();
+          const data: DoubanResult = await response.json();
 
           if (data.code === 200) {
             setDoubanData((prev) => [...prev, ...data.list]);
@@ -183,10 +171,10 @@ function DoubanPageClient() {
       <div className='px-4 sm:px-10 py-4 sm:py-8 overflow-visible'>
         {/* 页面标题 */}
         <div className='mb-8'>
-          <h1 className='text-3xl font-bold text-gray-800 mb-2'>
+          <h1 className='text-3xl font-bold text-gray-800 mb-2 dark:text-gray-200'>
             {getPageTitle()}
           </h1>
-          <p className='text-gray-600'>来自豆瓣的精选内容</p>
+          <p className='text-gray-600 dark:text-gray-400'>来自豆瓣的精选内容</p>
         </div>
 
         {/* 内容展示区域 */}
@@ -211,9 +199,11 @@ function DoubanPageClient() {
                     doubanData.map((item, index) => (
                       <div key={`${item.title}-${index}`} className='w-full'>
                         <DemoCard
+                          id={item.id}
                           title={item.title}
                           poster={item.poster}
                           rate={item.rate}
+                          type={type || 'movie'}
                         />
                       </div>
                     ))}

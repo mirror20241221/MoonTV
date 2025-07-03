@@ -3,6 +3,7 @@
 import {
   Clover,
   Film,
+  Github,
   Home,
   MessageCircleHeart,
   MountainSnow,
@@ -14,6 +15,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+import { useSite } from './SiteProvider';
 
 interface MobileBottomNavProps {
   /**
@@ -61,6 +64,15 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
     { icon: VenetianMask, label: '日漫', href: '/douban?type=tv&tag=日本动画' },
   ];
 
+  const { siteName } = useSite();
+  if (siteName !== 'MoonTV') {
+    navItems.push({
+      icon: Github,
+      label: 'MoonTV',
+      href: 'https://github.com/senshinya/MoonTV',
+    });
+  }
+
   const isActive = (href: string) => {
     const typeMatch = href.match(/type=([^&]+)/)?.[1];
     const tagMatch = href.match(/tag=([^&]+)/)?.[1];
@@ -79,7 +91,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
 
   return (
     <nav
-      className='md:hidden fixed left-0 right-0 z-20 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 overflow-x-auto overscroll-x-contain whitespace-nowrap scrollbar-hide'
+      className='md:hidden fixed left-0 right-0 z-20 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 overflow-x-auto overscroll-x-contain whitespace-nowrap scrollbar-hide dark:bg-gray-900/80 dark:border-gray-700/50'
       style={{
         /* 紧贴视口底部，同时在内部留出安全区高度 */
         bottom: 0,
@@ -90,17 +102,25 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
         {navItems.map((item) => {
           const active = isActive(item.href);
           return (
-            <li key={item.href} className='flex-shrink-0 w-1/4'>
+            <li key={item.href} className='flex-shrink-0 w-1/5'>
               <Link
                 href={item.href}
                 className='flex flex-col items-center justify-center w-full h-14 gap-1 text-xs'
               >
                 <item.icon
                   className={`h-6 w-6 ${
-                    active ? 'text-green-600' : 'text-gray-500'
+                    active
+                      ? 'text-green-600 dark:text-green-400'
+                      : 'text-gray-500 dark:text-gray-400'
                   }`}
                 />
-                <span className={active ? 'text-green-600' : 'text-gray-600'}>
+                <span
+                  className={
+                    active
+                      ? 'text-green-600 dark:text-green-400'
+                      : 'text-gray-600 dark:text-gray-300'
+                  }
+                >
                   {item.label}
                 </span>
               </Link>
