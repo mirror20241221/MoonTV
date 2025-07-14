@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 
 import { DoubanItem, DoubanResult } from '@/lib/types';
 
-import DemoCard from '@/components/DemoCard';
 import DoubanCardSkeleton from '@/components/DoubanCardSkeleton';
 import PageLayout from '@/components/PageLayout';
+import VideoCard from '@/components/VideoCard';
 
 function DoubanPageClient() {
   const searchParams = useSearchParams();
@@ -189,7 +189,7 @@ function DoubanPageClient() {
           ) : (
             <>
               {/* 内容网格 */}
-              <div className='grid grid-cols-3 gap-x-2 gap-y-12 px-0 sm:px-2 sm:grid-cols-[repeat(auto-fit,minmax(160px,1fr))] sm:gap-x-8 sm:gap-y-20 sm:px-4'>
+              <div className='grid grid-cols-3 gap-x-2 gap-y-12 px-0 sm:px-2 sm:grid-cols-[repeat(auto-fit,minmax(160px,1fr))] sm:gap-x-8 sm:gap-y-20'>
                 {loading
                   ? // 显示骨架屏
                     skeletonData.map((index) => (
@@ -198,12 +198,12 @@ function DoubanPageClient() {
                   : // 显示实际数据
                     doubanData.map((item, index) => (
                       <div key={`${item.title}-${index}`} className='w-full'>
-                        <DemoCard
-                          id={item.id}
+                        <VideoCard
+                          from='douban'
                           title={item.title}
                           poster={item.poster}
+                          douban_id={item.id}
                           rate={item.rate}
-                          type={type || 'movie'}
                         />
                       </div>
                     ))}
